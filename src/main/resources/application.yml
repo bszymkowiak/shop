@@ -6,7 +6,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 
 

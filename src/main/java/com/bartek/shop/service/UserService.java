@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -27,6 +29,17 @@ public class UserService {
 
     public Page<User> getPage(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public User updateUser(User user, Long id) {
+        User userDb = findById(id);
+
+        userDb.setEmail(user.getEmail());
+        userDb.setFirstName(user.getFirstName());
+        userDb.setLastName(user.getLastName());
+
+        return userDb;
     }
 
 }
