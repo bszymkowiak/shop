@@ -3,6 +3,8 @@ package com.bartek.shop.service;
 import com.bartek.shop.model.dao.Category;
 import com.bartek.shop.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,4 +24,9 @@ public class CategoryService {
     public void deleteCategoryById(Long id) {
         categoryRepository.deleteById(id);
     }
+
+    public Page<Category> getPage(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
+
 }
