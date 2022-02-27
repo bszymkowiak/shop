@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -29,4 +31,14 @@ public class ProductService {
         return productRepository.findAll(pageable);
     }
 
+    @Transactional
+    public Product updateProduct(Long id, Product product) {
+        Product productdb = findById(id);
+
+        productdb.setPrice(product.getPrice());
+        productdb.setName(product.getName());
+        productdb.setQuantity(product.getQuantity());
+
+        return productdb;
+    }
 }

@@ -1,6 +1,7 @@
 package com.bartek.shop.model.dao;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(indexes = @Index(name = "idx_email", columnList = "email", unique = true))
+@Builder
 public class User {
 
     @Id
