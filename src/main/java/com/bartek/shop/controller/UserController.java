@@ -3,9 +3,11 @@ package com.bartek.shop.controller;
 import com.bartek.shop.mapper.UserMapper;
 import com.bartek.shop.model.dto.UserDto;
 import com.bartek.shop.service.UserService;
+import com.bartek.shop.validator.group.Create;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,12 +16,14 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
 
     @PostMapping
+    @Validated(Create.class)
     public UserDto saveUser(@RequestBody @Valid UserDto user) {
         return userMapper.mapDaoToDto(userService.save(userMapper.mapDtoToDao(user)));
     }

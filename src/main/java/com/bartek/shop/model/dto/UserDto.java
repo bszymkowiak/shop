@@ -1,6 +1,7 @@
 package com.bartek.shop.model.dto;
 
 import com.bartek.shop.validator.PasswordValid;
+import com.bartek.shop.validator.group.Create;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,13 +18,12 @@ import javax.validation.constraints.Null;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL) //Jeśli jakieś pole w obiekcie będzie NULL to wtedy nie doda się w Jasonie w odpowiedzi dla klienta
-@PasswordValid
+@PasswordValid(groups = Create.class)
 public class UserDto {
 
 //    @NotNull //do wsystkich innych obiektow
     @Null
     private Long id;
-
     @NotBlank //tylko dla stringów. sprawdza czy po usunieciu wszystkich spacji, długość będzie większa od 0
     private String firstName;
     @NotBlank
