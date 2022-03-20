@@ -24,7 +24,7 @@ public class UserDto {
 //    @NotNull //do wsystkich innych obiektow
     @Null
     private Long id;
-    @NotBlank //tylko dla stringów. sprawdza czy po usunieciu wszystkich spacji, długość będzie większa od 0
+    @NotBlank(message = "Nie możesz podać żadnej wartości") //tylko dla stringów. sprawdza czy po usunieciu wszystkich spacji, długość będzie większa od 0
     private String firstName;
     @NotBlank
     private String lastName;
