@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,13 @@ public class AdviceController {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorDto handleEntityNotFoundException(EntityNotFoundException exception) {
+        log.warn(exception.getMessage(), exception);
+        return new ErrorDto(exception.getMessage());
+    }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorDto handleSqlIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException exception) {
         log.warn(exception.getMessage(), exception);
         return new ErrorDto(exception.getMessage());
     }

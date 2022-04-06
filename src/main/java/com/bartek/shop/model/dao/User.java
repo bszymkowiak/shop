@@ -4,8 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -13,6 +21,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(indexes = @Index(name = "idx_email", columnList = "email", unique = true))
 @Builder
+@EntityListeners(AuditingEntityListener.class) // EntityListener włącza jakikolwiek auditing, który podamy w parametrze.
+@Audited //adnotacja, która stworzy mi tabelke w bazie danych User_Aud, w którym jest zapisywana historaia zmian obiektów
 public class User {
 
     @Id
@@ -21,6 +31,17 @@ public class User {
     private String firstName;
     private String lastName;
     private String login;
+    @NotAudited
     private String password;
     private String email;
+    @CreatedDate // Ustawia czas stworzenia obiektu (dla AuditingEntityListener)
+    private LocalDateTime createdDate;
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+    @CreatedBy
+    private String createdBy;
+    @LastModifiedBy
+    private String lastModifiedBy;
+
+
 }

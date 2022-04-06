@@ -30,11 +30,11 @@ public class UserDto {
     private String lastName;
     @NotBlank
     private String login;
-    @NotBlank
-    @Length(min = 6)
+    @NotBlank(groups = Create.class)
+    @Length(min = 6, groups = Create.class)
 //    @Pattern // jakbysmy chcieli wynagac od usera w haśle znaku specjalnego i liczby musimy stworzyć wlasnego regexa
     private String password;
-    @NotBlank
+    @NotBlank(groups = Create.class)
     private String confirmedPassword;
     @NotBlank
     @Email
