@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.history.RevisionMetadata;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -39,4 +40,6 @@ public class UserDto {
     @NotBlank
     @Email
     private String email;
+    private Long revNumber;
+    private RevisionMetadata.RevisionType revType;
 }
