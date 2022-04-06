@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.history.RevisionMetadata;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +18,6 @@ public class ProductDto {
     private String name;
     private Double price;
     private Long quantity;
+    private Long revNumber;
+    private RevisionMetadata.RevisionType revType;
 }

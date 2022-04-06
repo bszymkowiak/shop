@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Data
@@ -34,6 +35,9 @@ public class User {
     @NotAudited
     private String password;
     private String email;
+    @ManyToMany
+    @JoinTable(name = "user_role", inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
     @CreatedDate // Ustawia czas stworzenia obiektu (dla AuditingEntityListener)
     private LocalDateTime createdDate;
     @LastModifiedDate
@@ -42,6 +46,4 @@ public class User {
     private String createdBy;
     @LastModifiedBy
     private String lastModifiedBy;
-
-
 }

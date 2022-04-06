@@ -1,21 +1,28 @@
 package com.bartek.shop.service;
 
 import com.bartek.shop.model.dao.User;
+import com.bartek.shop.repository.RoleRepository;
 import com.bartek.shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     public User save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        roleRepository.findByName("ROLE_USER").ifPresent(role -> user.setRoles(Collections.singleton(role))); //metoda singleton tworzy nam seta z jednym obiektem
         return userRepository.save(user);
     }
 
