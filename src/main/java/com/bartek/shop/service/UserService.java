@@ -3,12 +3,15 @@ package com.bartek.shop.service;
 import com.bartek.shop.model.dao.User;
 import com.bartek.shop.repository.RoleRepository;
 import com.bartek.shop.repository.UserRepository;
+import com.bartek.shop.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Collections;
 
@@ -49,4 +52,8 @@ public class UserService {
         return userDb;
     }
 
+    public User getCurrentUser() {
+        return userRepository.findByEmail(SecurityUtils.getCurrentUserName())
+                .orElseThrow(EntityNotFoundException::new);
+    }
 }

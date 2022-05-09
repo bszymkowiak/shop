@@ -6,6 +6,7 @@ import com.bartek.shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class ProductController {
     private final ProductMapper productMapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductDto saveProduct(@RequestBody ProductDto product) {
         return productMapper.mapDaoToDto(productService.save(productMapper.mapDToToDao(product)));
     }
@@ -33,11 +35,13 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProductById(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductDto updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
         return productMapper.mapDaoToDto(productService.updateProduct(id, productMapper.mapDToToDao(productDto)));
     }
