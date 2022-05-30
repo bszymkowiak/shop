@@ -1,5 +1,8 @@
 package com.bartek.shop.model.dao;
 
+import com.hazelcast.nio.ObjectDataInput;
+import com.hazelcast.nio.ObjectDataOutput;
+import com.hazelcast.nio.serialization.IdentifiedDataSerializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +15,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,7 +26,7 @@ import java.time.LocalDateTime;
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 @Audited
-public class Product {
+public class Product implements IdentifiedDataSerializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +42,30 @@ public class Product {
     private String createdBy;
     @LastModifiedBy
     private String lastModifiedBy;
+
+    @Override
+    public int getFactoryId() {
+        return 1;
+    }
+
+    @Override
+    public int getClassId() {
+        return 1;
+    }
+
+    @Override
+    public void writeData(ObjectDataOutput objectDataOutput) throws IOException {
+        objectDataOutput.writeLong(id);
+        objectDataOutput.writeString(name);
+        objectDataOutput.writeDouble(price);
+        objectDataOutput.writeLong(quantity);
+    }
+
+    @Override
+    public void readData(ObjectDataInput objectDataInput) throws IOException {
+        id = objectDataInput.readLong();
+        name = objectDataInput.readString();
+        price = objectDataInput.readDouble();
+        quantity = objectDataInput.readLong();
+    }
 }

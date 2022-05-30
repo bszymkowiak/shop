@@ -38,6 +38,5 @@ public class CategoryService {
         categoryDb.setName(category.getName());
 
         return categoryDb;
-
     }
 }

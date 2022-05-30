@@ -36,17 +36,21 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<UserDto> getUsers(@RequestParam int page, @RequestParam int size) {
         return userService.getPage(PageRequest.of(page, size))
                 .map(userMapper::mapDaoToDto);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated() && (hasRole('ADMIN') || @ securityService.hasAccessToUser(#id))")
     public void deleteUser(@PathVariable Long id) {
+        //czy jak dodałem adnotacje PreAuthorize to czy nie powinienem dodać tutaj np. auditingu lub loggera?
         userService.deleteById(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated() && (hasRole('ADMIN') || @ securityService.hasAccessToUser(#id))")
     public UserDto updateUser(@PathVariable Long id, @RequestBody @Valid UserDto user) {
         return userMapper.mapDaoToDto(userService.updateUser(userMapper.mapDtoToDao(user), id));
     }

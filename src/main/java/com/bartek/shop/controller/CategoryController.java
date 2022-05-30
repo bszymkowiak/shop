@@ -6,6 +6,7 @@ import com.bartek.shop.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,16 +29,19 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryDto saveCategory(@RequestBody CategoryDto categoryDto) {
         return categoryMapper.mapDaoToDto(categoryService.save(categoryMapper.mapDtoToDao(categoryDto)));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategoryById(@PathVariable Long id) {
         categoryService.deleteCategoryById(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryDto updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
         return categoryMapper.mapDaoToDto(categoryService.updateCategory(id, categoryMapper.mapDtoToDao(categoryDto)));
     }

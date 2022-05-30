@@ -10,6 +10,7 @@ import com.bartek.shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,16 +24,19 @@ public class HistoryController {
     private final HistoryMapper historyMapper;
 
     @GetMapping("/users/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<UserDto> getUserHistory(@RequestParam int size, @RequestParam int page, @PathVariable Long userId) {
         return userRepository.findRevisions(userId, PageRequest.of(page, size)).map(historyMapper::mapUserRevisionToDto);
     }
 
     @GetMapping("products/{productId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<ProductDto> getProductHistory(@RequestParam int size, @RequestParam int page, @PathVariable Long productId) {
         return productRepository.findRevisions(productId, PageRequest.of(page, size)).map(historyMapper::mapRevisionProductToDto);
     }
 
     @GetMapping("categories/{categoryId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Page<CategoryDto> getCategoryHistory(@RequestParam int size, @RequestParam int page, @PathVariable Long categoryId) {
         return categoryRepository.findRevisions(categoryId, PageRequest.of(page, size)).map(historyMapper::mapRevisionCategoryToDto);
     }
