@@ -1,4 +1,4 @@
-# Shop
+# Shop - in progress
 
 ## Table of contents
 
