@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ShoppingCart {
+public class Basket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

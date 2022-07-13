@@ -2,6 +2,7 @@ package com.bartek.shop.controller;
 
 import com.bartek.shop.mapper.UserMapper;
 import com.bartek.shop.model.dto.UserDto;
+import com.bartek.shop.service.BasketService;
 import com.bartek.shop.service.UserService;
 import com.bartek.shop.validator.group.Create;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,6 @@ public class UserController {
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated() && (hasRole('ADMIN') || @ securityService.hasAccessToUser(#id))")
     public void deleteUser(@PathVariable Long id) {
-        //czy jak dodałem adnotacje PreAuthorize to czy nie powinienem dodać tutaj np. auditingu lub loggera?
         userService.deleteById(id);
     }
 

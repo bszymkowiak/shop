@@ -34,6 +34,7 @@ public class Product implements IdentifiedDataSerializable {
     private String name;
     private Double price;
     private Long quantity;
+    private String filePath;
     @CreatedDate
     private LocalDateTime createdDate;
     @LastModifiedDate
@@ -59,6 +60,7 @@ public class Product implements IdentifiedDataSerializable {
         objectDataOutput.writeString(name);
         objectDataOutput.writeDouble(price);
         objectDataOutput.writeLong(quantity);
+        objectDataOutput.writeString(filePath);
     }
 
     @Override
@@ -67,5 +69,6 @@ public class Product implements IdentifiedDataSerializable {
         name = objectDataInput.readString();
         price = objectDataInput.readDouble();
         quantity = objectDataInput.readLong();
+        filePath = objectDataInput.readString();
     }
 }

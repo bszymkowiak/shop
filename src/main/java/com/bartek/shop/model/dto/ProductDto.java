@@ -18,6 +18,7 @@ public class ProductDto {
     private String name;
     private Double price;
     private Long quantity;
+    private String filePath;
     private Long revNumber;
     private RevisionMetadata.RevisionType revType;
 }

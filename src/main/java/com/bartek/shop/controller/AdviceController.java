@@ -40,7 +40,7 @@ public class AdviceController {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorDto handleSqlIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException exception) {
         log.warn(exception.getMessage(), exception);
-        return new ErrorDto(exception.getMessage());
+        return new ErrorDto("Data already exists.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

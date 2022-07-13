@@ -1,5 +1,7 @@
 package com.bartek.shop.service;
 
+import com.bartek.shop.config.properties.FilePathConfig;
+import com.bartek.shop.helper.FileHelper;
 import com.bartek.shop.model.dao.Product;
 import com.bartek.shop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +26,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final FilePathConfig filePathConfig;
+    private final FileHelper fileHelper;
 
     @CachePut(cacheNames = "product", key = "#result.id")
-    public Product save(Product product) {
+    public Product save(Product product, MultipartFile image) {
+
+        try {
+            Path path = Paths.get(filePathConfig.getProduct(), product.getName() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
+            fileHelper.saveFile(image.getInputStream(), path);
+            product.setFilePath(path.toString());
+        } catch (IOException e) {
+            log.warn("Could not save file", e);
+        }
+
         return productRepository.save(product);
     }
 
@@ -32,6 +51,12 @@ public class ProductService {
 
     @CacheEvict(cacheNames = "product", key = "#id")
     public void deleteProductById(Long id) {
+        Path pathDb = Path.of(productRepository.getById(id).getFilePath());
+        try {
+            fileHelper.deleteFile(pathDb);
+        } catch (IOException e) {
+            log.warn(e.getMessage());
+        }
         productRepository.deleteById(id);
     }
 
@@ -41,12 +66,26 @@ public class ProductService {
 
     @Transactional
     @CachePut(cacheNames = "product", key = "#id")
-    public Product updateProduct(Long id, Product product) {
+    public Product updateProduct(Long id, Product product, MultipartFile image) {
         Product productdb = findById(id);
+        String productdbFilePath = productdb.getFilePath();
 
         productdb.setPrice(product.getPrice());
         productdb.setName(product.getName());
         productdb.setQuantity(product.getQuantity());
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                Path path = Paths.get(filePathConfig.getProduct(), productdb.getName() + "." + FilenameUtils.getExtension(image.getOriginalFilename()));
+                fileHelper.saveFile(image.getInputStream(), path);
+                product.setFilePath(path.toString());
+                if (!productdb.getFilePath().equals(productdbFilePath)) {
+                    fileHelper.deleteFile(Paths.get(productdbFilePath));
+                }
+            } catch (IOException e) {
+                log.warn("Could not save file", e);
+            }
+        }
 
         return productdb;
     }

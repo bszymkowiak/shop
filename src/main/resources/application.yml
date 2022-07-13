@@ -10,4 +10,8 @@ spring:
     serialization:
       fail-on-empty-beans: false
   flyway:
-    baselineOnMigrate: true
+    baselineOnMigrate: true #wykonywanie skryptów bazodanowych z folderu Db migration
+
+file:
+  product: C:\Users\Bartek\Desktop\Java projects\shop-files
+
