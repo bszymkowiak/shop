@@ -18,4 +18,4 @@ Shop application created in Java 15.
    * Java - JUnit - integration tests
 * Hazelcast 
 * Documentation
-
+* Auditing
